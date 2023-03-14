@@ -21,8 +21,8 @@ add_subdirectory(concurrency)
 # for common.pb.h
 #include_directories(${CMAKE_CURRENT_BINARY_DIR})
 
-#add_subdirectory(demo/demo_common)
-#add_subdirectory(demo/demo_network)
+add_subdirectory(demo/comm)
+add_subdirectory(demo/concurrency)
 #add_subdirectory(demo/demo_http)
 #add_subdirectory(demo/demo_raw_network)
 
