@@ -14,17 +14,17 @@ include_directories(./)
 #find_package(Protobuf REQUIRED)
 #message("main Protobuf lib: ${PROTOBUF_LIBRARIES}, inc: ${PROTOBUF_INCLUDE_DIR}")
 
-add_subdirectory(comm)
+add_subdirectory(src/comm)
 
-add_subdirectory(concurrency)
+add_subdirectory(src/concurrency)
 
 # for common.pb.h
 #include_directories(${CMAKE_CURRENT_BINARY_DIR})
 
-add_subdirectory(demo/comm)
-add_subdirectory(demo/concurrency)
-#add_subdirectory(demo/demo_http)
-#add_subdirectory(demo/demo_raw_network)
+add_subdirectory(example/comm)
+add_subdirectory(example/concurrency)
+#add_subdirectory(example/demo_http)
+#add_subdirectory(example/demo_raw_network)
 
 #set(SOURCE_FILES main.cpp)
 #add_executable(my_project ${SOURCE_FILES})
