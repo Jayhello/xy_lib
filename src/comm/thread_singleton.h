@@ -4,7 +4,7 @@
 
 #pragma once
 
-#include "src/comm/noncopyable.h"
+#include "noncopyable.h"
 
 namespace xy{
 

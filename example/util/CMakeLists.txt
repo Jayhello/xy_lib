@@ -1,10 +1,11 @@
 cmake_minimum_required(VERSION 3.9)
 
-project(demo_common)
+project(demo_util)
 
 set(CMAKE_CXX_STANDARD 11)
 SET(CMAKE_CXX_FLAGS -pthread)
 
+include_directories(../../src)
 
 #set(BOOST_ROOT "/mnt/f/3rd/dependence/")
 #set(BOOST_INCLUDE_DIRS "${BOOST_ROOT}/include")
@@ -16,8 +17,8 @@ SET(CMAKE_CXX_FLAGS -pthread)
 #message("boost lib: ${Boost_LIBRARIES}")
 #message("boost inc:${Boost_INCLUDE_DIR}")
 
-add_executable(demo_comm demo_comm.cpp)
-target_link_libraries(demo_comm comm_lib)
+add_executable(demo_util demo_comm.cpp)
+target_link_libraries(demo_util comm_lib)
 
 #add_executable(demo_rwlock demo_rwlock.cpp)
 #target_link_libraries(demo_rwlock

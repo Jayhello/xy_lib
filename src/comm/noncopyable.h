@@ -13,4 +13,4 @@ private:
     noncopyable& operator=(const noncopyable &) = delete;
 };
 
-} // comm
+} // util

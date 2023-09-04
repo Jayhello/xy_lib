@@ -16,12 +16,12 @@ include_directories(./)
 
 add_subdirectory(src/comm)
 
-add_subdirectory(src/concurrency)
+add_subdirectory(src/network)
 
 # for common.pb.h
 #include_directories(${CMAKE_CURRENT_BINARY_DIR})
 
-add_subdirectory(example/comm)
+add_subdirectory(example/util)
 add_subdirectory(example/concurrency)
 #add_subdirectory(example/demo_http)
 #add_subdirectory(example/demo_raw_network)
