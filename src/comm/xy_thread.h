@@ -3,8 +3,11 @@
 //
 #include "noncopyable.h"
 #include "xy_exception.h"
+#include <thread>
 
 namespace xy{
+
+
 
 class Thread : public noncopyable{
 public:
