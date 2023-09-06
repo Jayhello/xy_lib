@@ -21,10 +21,20 @@ public:
     // detach, 不能在当前线程上调用
     void detach();
 
+    // 交出当前线程运行权
+    // std::this_thread::yield();
+
     std::thread* _th;
 };
 
-class Thread : public noncopyable{
+class Runnable{
+public:
+    virtual ~Runnable() = default;
+    virtual void run() = 0;
+};
+
+
+class Thread : public Runnable , public noncopyable{
 public:
 
     void start();
