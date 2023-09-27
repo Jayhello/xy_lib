@@ -9,6 +9,7 @@
 #include <memory>
 #include <pthread.h>
 #include <random>
+#include <thread>
 
 namespace xy{
 
@@ -64,6 +65,14 @@ uint64_t gettid() {
     uint64_t uid = 0;
     memcpy(&uid, &tid, std::min(sizeof(tid), sizeof(uid)));
     return uid;
+}
+
+void sleep(uint32_t sec) {
+    std::this_thread::sleep_for(std::chrono::seconds(sec));
+}
+
+void msleep(uint32_t ms) {
+    std::this_thread::sleep_for(std::chrono::milliseconds(ms));
 }
 
 int GetRandomRange(int min, int max){

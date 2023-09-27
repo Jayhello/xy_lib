@@ -1,6 +1,7 @@
 
 #include "noncopyable.h"
 #include "xy_exception.h"
+#include "xy_monitor.h"
 #include <thread>
 
 namespace xy{
@@ -36,13 +37,23 @@ public:
 
 class Thread : public Runnable , public noncopyable{
 public:
+    Thread():_running(false), _th(nullptr){}
 
-    void start();
+    virtual ~Thread();
+
+    ThreadControl start();
 
     virtual void run() = 0;
 
 protected:
+    static void threadEntry(Thread *pThread);
 
+protected:
+    bool _running;
+
+    std::thread  *_th;
+
+    Monitor      _monitor;
 };
 
 } // xy

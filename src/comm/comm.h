@@ -15,17 +15,21 @@ using namespace std;
 
 int64_t timeMicro();
 
-int64_t timeMilli() { return timeMicro() / 1000; }
+inline int64_t timeMilli() { return timeMicro() / 1000; }
 
 std::string format(const char *fmt, ...);
 
 std::string readableTime(time_t t);
 
-int64_t atoi(const char *b, const char *e) { return strtol(b, (char **) &e, 10); }
+inline int64_t atoi(const char *b, const char *e) { return strtol(b, (char **) &e, 10); }
 
-int64_t atoi(const char *b) { return atoi(b, b + strlen(b)); }
+inline int64_t atoi(const char *b) { return atoi(b, b + strlen(b)); }
 
 uint64_t gettid();
+
+void sleep(uint32_t sec);
+
+void msleep(uint32_t ms);
 
 int GetRandomRange(int min, int max);
 

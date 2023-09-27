@@ -98,13 +98,6 @@ void Logger::maybeRotate() {
     close(fd);
 }
 
-uint64_t gettid() {
-    pthread_t tid = pthread_self();
-    uint64_t uid = 0;
-    memcpy(&uid, &tid, std::min(sizeof(tid), sizeof(uid)));
-    return uid;
-}
-
 static thread_local uint64_t tid;
 void Logger::logv(int level, const char *file, int line, const char *func, const char *fmt...) {
     if (tid == 0) {
