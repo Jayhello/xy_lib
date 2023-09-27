@@ -100,6 +100,8 @@ bool Epoller::errorEvent(const epoll_event &ev){
 
 // ------------------------------------------------------------------
 EpollNotice::EpollNotice():_fd(-1), _pEp(nullptr){
+    _wakeupFds[0] = -1;
+    _wakeupFds[1] = -1;
 }
 
 EpollNotice::~EpollNotice(){
@@ -107,6 +109,8 @@ EpollNotice::~EpollNotice(){
 }
 
 int EpollNotice::init(Epoller *pEp){
+    _pEp = pEp;
+
     int r = pipe(_wakeupFds);
     fatalif(r, "pipe failed %d %s", errno, strerror(errno));
     r = addFdFlag(_wakeupFds[0], FD_CLOEXEC);
@@ -140,15 +144,22 @@ int EpollNotice::read(int fd, char& c){
 }
 
 int EpollNotice::release(){
-    if(_fd > 0){
-        _pEp->del(_fd, 0, EPOLLIN | EPOLLOUT);
-        ::close(_fd);
+    if(_wakeupFds[0] > 0){
+        _pEp->del(_wakeupFds[0], 0, EPOLLIN);
+        ::close(_wakeupFds[0]);
+        _wakeupFds[0] = -1;
     }
+
+    if(_wakeupFds[1] > 0){
+        ::close(_wakeupFds[1]);
+        _wakeupFds[1] = -1;
+    }
+
     return 0;
 }
 
 int EpollNotice::fd()const{
-    return _fd;
+    return _wakeupFds[0];
 }
 
 } // xy

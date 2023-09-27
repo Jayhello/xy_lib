@@ -59,7 +59,7 @@ void test_epoll(){
 
     sleep(1);
 
-    notice.notify();
+    notice.notify('a');
     info("notice ret: %d", ret);
 
     sleep(11);
