@@ -1,6 +1,4 @@
-//
-// Created by Administrator on 2023/9/25.
-//
+
 #pragma once
 #include <mutex>
 #include <condition_variable>

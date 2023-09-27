@@ -1,6 +1,3 @@
-//
-// Created by Administrator on 2023/9/25.
-//
 
 #include "xy_monitor.h"
 
