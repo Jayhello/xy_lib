@@ -5,6 +5,7 @@
 #include <netinet/in.h>
 #include <arpa/inet.h>
 #include <string.h>
+#include <netdb.h>
 
 namespace xy{
 
@@ -141,6 +142,17 @@ void setNoBlock(int fd){
 int addFdFlag(int fd, int flag) {
     int ret = fcntl(fd, F_GETFD);
     return fcntl(fd, F_SETFD, ret | flag);
+}
+
+struct in_addr getHostByName(const std::string &host) {
+    struct in_addr addr;
+    struct hostent *he = gethostbyname(host.c_str());
+    if (he && he->h_addrtype == AF_INET) {
+        addr = *reinterpret_cast<struct in_addr *>(he->h_addr);
+    } else {
+        addr.s_addr = INADDR_NONE;
+    }
+    return addr;
 }
 
 } // xy

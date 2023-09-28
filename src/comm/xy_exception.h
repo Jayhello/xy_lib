@@ -25,10 +25,17 @@ private:
     string  _buffer;
 };
 
-// errno
-int getErrno();
+inline int getErrno() {
+    return errno;
+}
 
 // errno 转化为字符串
 string getErrnoDesc(int err);
 
 } // xy
+
+#define THROW_EXCEPTION_SYSCODE(EX_CLASS, buffer) \
+{                               \
+int ret = getErrno();           \
+throw EX_CLASS(buffer, ret);    \
+}

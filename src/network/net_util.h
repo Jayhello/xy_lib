@@ -3,6 +3,7 @@
 
 #include <string>
 #include <sys/socket.h>
+#include <netinet/in.h>
 
 namespace xy{
 
@@ -47,5 +48,7 @@ int setReusePort(int fd);
 int setSocketOpt(int fd, int opt, const void* val, socklen_t opt_len, int level);
 
 int addFdFlag(int fd, int flag);
+
+struct in_addr getHostByName(const std::string &host);
 
 } // xy

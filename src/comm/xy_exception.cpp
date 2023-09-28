@@ -21,10 +21,6 @@ const char *Exception::what() const throw() {
 Exception::~Exception() {
 }
 
-int getErrno() {
-    return errno;
-}
-
 string getErrnoDesc(int err) {
     string errMsg;
     errMsg = strerror(err);
