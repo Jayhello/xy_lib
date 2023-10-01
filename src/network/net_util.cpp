@@ -55,7 +55,7 @@ int createTcpServerSocket(const string& sIp, int iPort){
     return socketFd;
 }
 
-int doAccept(int fd, string& sIp, int& iPort){
+int doAccept(int fd, string& sIp, uint16_t& iPort){
     struct sockaddr_in clnt_addr;
     socklen_t clnt_addr_len = sizeof(clnt_addr);
     bzero(&clnt_addr, sizeof(clnt_addr));

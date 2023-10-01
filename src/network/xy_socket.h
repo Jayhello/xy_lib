@@ -19,6 +19,7 @@ struct SocketException : public Exception {
 };    
     
 class Socket{
+public:
     Socket();
 
     virtual ~Socket();
@@ -34,13 +35,10 @@ class Socket{
 
     void close();
 
+    // host填空则是 0.0.0.0
     void bind(const std::string &host, short port);
 
     void listen(int connBackLog);
-
-    int setSockOpt(int opt, const void *pvOptVal, SOCKET_LEN_TYPE optLen, int level = SOL_SOCKET);
-
-    int getSockOpt(int opt, void *pvOptVal, SOCKET_LEN_TYPE &optLen, int level = SOL_SOCKET) const;
 
     void setblock(bool bBlock = false);
 

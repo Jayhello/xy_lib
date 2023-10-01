@@ -19,7 +19,7 @@ int doBind(int fd, const string& sIp, int iPort);
 
 int doListen(int fd, int n = SOMAXCONN);
 
-int doAccept(int fd, string& sIp, int& iPort);
+int doAccept(int fd, string& sIp, uint16_t& iPort);
 
 // create, bind, listen, ret > 0 succ
 int createTcpServerSocket(const string& sIp, int iPort);
