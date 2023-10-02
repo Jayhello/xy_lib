@@ -6,7 +6,7 @@
 
 namespace xy{
 
-Server::Server():_ep(), _stop(false){
+Server::Server():_ep(), _stop(false), _iThreadNum(1){
 }
 
 Server::~Server(){
@@ -15,6 +15,11 @@ Server::~Server(){
 
 int Server::init(){
     _ep.create(1024);
+
+    for(int i = 0; i < _iThreadNum; ++i){
+        NetThread * pth = new NetThread(this, i);
+        _vNetThread.push_back(pth);
+    }
 
     return 0;
 }

@@ -27,8 +27,11 @@ protected:
 private:
     Epoller                     _ep;
     volatile bool               _stop;
+    int                         _iThreadNum;
     std::vector<AcceptorPtr>    _vAcceptor;
     std::map<int, AcceptorPtr>  _mFdAcceptor;
+
+    std::vector<NetThread*>     _vNetThread;
 };
 
 } // xy
