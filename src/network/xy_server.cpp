@@ -1,4 +1,3 @@
-
 #include "xy_server.h"
 #include "net_util.h"
 #include "comm/logging.h"
@@ -54,6 +53,8 @@ void Server::waitForShutdown(){
         _ep.add(ptr->fd(), 0, EPOLLIN);
     }
 
+    startThread();
+
     while(not _stop){
         int num = _ep.wait(300);
 
@@ -71,7 +72,26 @@ void Server::waitForShutdown(){
 
 }
 
+void Server::startThread(){
+    for(int i = 0; i < _iThreadNum; ++i){
+        _vNetThread[i]->start();
+    }
+}
+
+void Server::stopThread(){
+    for(int i = 0; i < _iThreadNum; ++i){
+        if(_vNetThread[i]->isActive()){
+            _vNetThread[i]->getThreadControl().join();
+        }
+    }
+}
+
 void Server::terminate(){
+
+    for(int i = 0; i < _iThreadNum; ++i){
+        _vNetThread[i]->terminate();
+    }
+
 
 }
 

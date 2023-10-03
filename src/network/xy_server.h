@@ -24,6 +24,10 @@ public:
 protected:
     int accept(int fd);
 
+    void startThread();
+
+    void stopThread();
+
 private:
     Epoller                     _ep;
     volatile bool               _stop;

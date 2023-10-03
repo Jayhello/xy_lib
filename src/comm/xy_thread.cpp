@@ -6,6 +6,16 @@
 
 namespace xy{
 
+void ThreadControl::join(){
+    if(_th->joinable()){
+        _th->join();
+    }
+}
+
+void ThreadControl::detach(){
+    _th->detach();
+}
+
 Thread::~Thread(){
     if (nullptr != _th) {
         //如果资源没有被detach或者被join，则自己释放

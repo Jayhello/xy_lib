@@ -45,6 +45,12 @@ public:
 
     virtual void run() = 0;
 
+    bool isActive()const{return _running;}
+
+    ThreadControl getThreadControl(){
+        return ThreadControl(_th);
+    }
+
 protected:
     static void threadEntry(Thread *pThread);
 
