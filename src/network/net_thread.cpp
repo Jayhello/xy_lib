@@ -5,14 +5,16 @@
 namespace xy{
 
 NetThread::NetThread(Server* pServer, int threadIdx):_pServer(pServer), _threadIdx(threadIdx){
+    _ep.create(1024);
+    _noticer.init(&_ep);
 }
 
 NetThread::~NetThread(){
 
 }
 
-void NetThread::addConnection(ConnectionPtr){
-
+void NetThread::addConnection(ConnectionPtr pc){
+    _ep.add(pc->fd(), 0, EPOLLIN);
 }
 
 void NetThread::terminate(){
@@ -34,7 +36,7 @@ void NetThread::run(){
 
         }
     }
-}
+z}
 
 
 

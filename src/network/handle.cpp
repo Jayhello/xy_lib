@@ -1,5 +1,3 @@
-
-
 #include "handle.h"
 
 namespace xy{

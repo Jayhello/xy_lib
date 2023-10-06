@@ -6,6 +6,12 @@
 
 namespace xy{
 
+class SendContext{
+public:
+
+
+};
+
 class Acceptor{
 public:
     // host填空则是 0.0.0.0

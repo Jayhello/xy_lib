@@ -42,8 +42,11 @@ int Server::accept(int fd){
 //    if(max_connection){
 //        close()
 //    }
+    auto pAc = _mFdAcceptor[fd];
+    auto pThread = getNetThread(cfd);
+    ConnectionPtr pc = new Connection(cfd, pAc, pThread, sIp, iPort);
 
-
+    pThread->addConnection(pc);
 
     return 0;
 }
@@ -62,14 +65,14 @@ void Server::waitForShutdown(){
             const epoll_event &ev = _ep.get(i);
 
             try{
-
+                accept(ev.data.fd);
             } catch (const std::exception& ex) {
 
             }
         }
-
     }
 
+    stopThread();
 }
 
 void Server::startThread(){

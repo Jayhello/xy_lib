@@ -24,6 +24,14 @@ public:
 protected:
     int accept(int fd);
 
+    NetThread* getNetThread(int cfd)const{
+        return _vNetThread[getNetThreadIdx(cfd)];
+    }
+
+    int getNetThreadIdx(int cfd)const{
+        return cfd % _iThreadNum;
+    }
+
     void startThread();
 
     void stopThread();
