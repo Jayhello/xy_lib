@@ -20,12 +20,22 @@ public:
 
     void terminate();
 
+protected:
+    // 处理fd的读写事件
+    void processNet(const epoll_event &ev);
+
+    // 内部事件
+    void processPipe();
+
+    Connection *getConnectionPtr(int fd) { return _conList.get(fd); }
+
 private:
     int             _threadIdx;
     Server*         _pServer;
     Epoller         _ep;
     EpollNotice     _noticer;
-    bool            _bTerminate;
+    bool            _bTerminate = false;
+    ConnectionList  _conList;
 };
 
 } // xy

@@ -1,10 +1,12 @@
 
 #include "net_thread.h"
 #include "xy_server.h"
+#include "comm/logging.h"
+#include "comm/comm.h"
 
 namespace xy{
 
-NetThread::NetThread(Server* pServer, int threadIdx):_pServer(pServer), _threadIdx(threadIdx){
+NetThread::NetThread(Server* pServer, int threadIdx):_pServer(pServer), _threadIdx(threadIdx), _conList(this){
     _ep.create(1024);
     _noticer.init(&_ep);
 }
@@ -15,6 +17,7 @@ NetThread::~NetThread(){
 
 void NetThread::addConnection(ConnectionPtr pc){
     _ep.add(pc->fd(), 0, EPOLLIN);
+    _conList.add(pc, pc->getTimeout() + TNOW);
 }
 
 void NetThread::terminate(){
@@ -22,23 +25,53 @@ void NetThread::terminate(){
     _noticer.notify();
 }
 
+void NetThread::processNet(const epoll_event &ev){
+    int fd = ev.data.fd;
+
+    ConnectionPtr ptrCon = getConnectionPtr(fd);
+    if(nullptr == ptrCon){
+        error("NetThread::processNet connection fd %d not exists", fd);
+        return;
+    }
+
+    if(Epoller::errorEvent(ev)){
+        error("NetThread::processNet connection fd %d error event", fd);
+        return;
+    }
+
+    if(Epoller::readEvent(ev)){
+
+    }
+
+    if(Epoller::writeEvent(ev)){
+
+    }
+}
+
+void NetThread::processPipe(){
+
+}
+
 void NetThread::run(){
     while(not _bTerminate){
         int num = _ep.wait(1000);
 
         if(_bTerminate){
+            info("new_thread terminate");
             break;
         }
 
         for(int i = 0; i < num; ++i){
             const epoll_event &ev = _ep.get(i);
 
-
+            if(_noticer.fd() == ev.data.fd){
+                processPipe();
+            }else{
+                processNet(ev);
+            }
         }
     }
-z}
-
-
+}
 
 
 } // xy

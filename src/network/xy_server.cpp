@@ -44,7 +44,7 @@ int Server::accept(int fd){
 //    }
     auto pAc = _mFdAcceptor[fd];
     auto pThread = getNetThread(cfd);
-    ConnectionPtr pc = new Connection(cfd, pAc, pThread, sIp, iPort);
+    ConnectionPtr pc = new Connection(cfd, pAc, pThread, sIp, iPort, pAc->getTimeout());
 
     pThread->addConnection(pc);
 

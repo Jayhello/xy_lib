@@ -19,10 +19,17 @@ public:
 
     int fd()const{return _sock.getfd();}
 
+    int getTimeout()const{return _timeoutSec;}
+
+    int setTimeout(int timeout){
+        _timeoutSec = timeout;
+    }
+
 private:
     Ip4Addr                 _addr;
     Socket                  _sock;
     std::vector<Handler*>   _vHandle;
+    int                     _timeoutSec;  // 链接多少秒后算超时
 };
 
 using AcceptorPtr = Acceptor*;

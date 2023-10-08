@@ -10,8 +10,29 @@
 #include <pthread.h>
 #include <random>
 #include <thread>
+#include <sys/time.h>
 
 namespace xy{
+
+int64_t now2ms() {
+    struct timeval tv;
+
+    gettimeofday(&tv, 0);
+
+    return tv.tv_sec * (int64_t) 1000 + tv.tv_usec / 1000;
+}
+
+int64_t now(){
+    return now2ms() / 1000;
+}
+
+int64_t now2us() {
+    struct timeval tv;
+
+    gettimeofday(&tv, 0);
+
+    return tv.tv_sec * (int64_t) 1000000 + tv.tv_usec;
+}
 
 int64_t timeMicro() {
     std::chrono::time_point<std::chrono::system_clock> p = std::chrono::system_clock::now();

@@ -9,9 +9,21 @@
 #include <utility>
 #include "noncopyable.h"
 
+#define TNOW     xy::now()
+#define TNOWMS   xy::now2ms()
+
 namespace xy{
 
 using namespace std;
+
+// 获取当前时间的的毫秒数.
+int64_t now2ms();
+
+// 获取当前时间的的秒数.
+int64_t now();
+
+// 取出当前时间的微秒.
+int64_t now2us();
 
 int64_t timeMicro();
 
