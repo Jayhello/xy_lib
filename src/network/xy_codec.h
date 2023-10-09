@@ -4,13 +4,13 @@
 
 namespace xy{
 
-enum EParseResult{
-    EParseResult_Err  = -1,   // 解析异常, 可以关闭链接
-    EParseResult_Less = 0,    //
-    EParseResult_Full = 1,    //
-};
+//enum EParseResult{
+//    EParseResult_Err  = -1,   // 解析异常, 可以关闭链接
+//    EParseResult_Less = 0,    //
+//};
 
-using ProtocolParserFunc = std::function<EParseResult(Buffer&, std::vector<char>&)>;
+//using ProtocolParserFunc = std::function<EParseResult(Buffer&, std::vector<char>&)>;
+using ProtocolParserFunc = std::function<int(Slice data, Slice &)>;
 
 struct CodecBase {
     // > 0 解析出完整消息，消息放在msg中，返回已扫描的字节数

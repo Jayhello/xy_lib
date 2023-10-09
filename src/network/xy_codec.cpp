@@ -1,5 +1,6 @@
 
 #include "xy_codec.h"
+#include "net_util.h"
 
 namespace xy{
 
@@ -29,7 +30,7 @@ int LengthCodec::tryDecode(Slice data, Slice &msg) {
     if (data.size() < 8) {
         return 0;
     }
-    int len = net::ntoh(*(int32_t *) (data.data() + 4));
+    int len = ntoh(*(int32_t *) (data.data() + 4));
     if (len > 1024 * 1024 || memcmp(data.data(), "mBdT", 4) != 0) {
         return -1;
     }
@@ -40,7 +41,7 @@ int LengthCodec::tryDecode(Slice data, Slice &msg) {
     return 0;
 }
 void LengthCodec::encode(Slice msg, Buffer &buf) {
-    buf.append("mBdT").appendValue(net::hton((int32_t) msg.size())).append(msg);
+    buf.append("mBdT").appendValue(hton((int32_t) msg.size())).append(msg);
 }
 
 } // xy

@@ -43,6 +43,16 @@ public:
     inline char operator[](size_t n) const { return pb_[n]; }
 
     std::string toString() const { return std::string(pb_, pe_); }
+
+    std::vector<char> toVecChar()const{
+        std::vector<char> vec;
+        if(size()){
+            vec.resize(size());
+            memcpy(vec.data(), data(), size());
+        }
+        return vec;
+    }
+
     // Three-way comparison.  Returns value:
     int compare(const Slice &b) const;
 

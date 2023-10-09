@@ -1,4 +1,5 @@
 #include "connection.h"
+#include "acceptor.h"
 #include "comm/logging.h"
 #include "comm/comm.h"
 #include "net_util.h"
@@ -21,14 +22,30 @@ int Connection::recv(){
         }else if (rd < 0 && (errno == EAGAIN || errno == EWOULDBLOCK)){   // 读取完了
             break;
         }else if(rd <= 0){  // 读取出错了
-            error("recv fd:%d fail ret: %d", _fd, rd);
+            error("recv fd:%d fail, ret: %d", _fd, rd);
             return -1;
         }else{
             _recvBuffer.addSize(rd);
         }
     }
 
+    Slice msg;
+    int ret = _pAcceptor->getProtocol()(_recvBuffer, msg);
 
+    if(0 == ret){       // 没有收到完整的包
+        return 0;
+    }else if(ret < 0){  // 解包失败(关闭链接)
+        error("parse fd:%d fail, ret: %d", _fd, ret);
+        return ret;
+    }
+
+    // 处理一个完整的包
+    auto ptr = std::make_shared<SendContext>(_fd, _ip, _port);
+    ptr->buffer() = std::move(msg.toVecChar());
+
+    _pAcceptor->pushRecvQueue(ptr);
+
+    return 0;
 }
 
 // --------------------------------------------------------------------------------------------------------------

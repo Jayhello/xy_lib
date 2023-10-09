@@ -4,13 +4,15 @@
 #include "comm/logging.h"
 #include "comm/comm.h"
 #include "comm/xy_thread.h"
+#include "comm/slice.h"
 
 int main(int argc, char** argv){
 
     std::cout << __FUNCTION__ << " do" << std::endl;
 
 //    xy::simple_log();
-    xy::simple_thread();
+//    xy::simple_thread();
+    xy::simple_slice();
 
     return 0;
 }
@@ -37,6 +39,19 @@ void simple_thread(){
         sleep(3);
     } catch (const std::exception& ex) {
         std::cout << "ex: " << ex.what() << endl;
+    }
+
+}
+
+void simple_slice(){
+    Slice slice("abc");
+    std::cout << slice.toString() << std::endl;
+
+    {
+        std::vector<char> vec(slice.toVecChar());
+        std::cout << "vec size: " << vec.size() << ",";
+        for(auto c : vec) std::cout << c;
+        std::cout << std::endl;
     }
 
 }
