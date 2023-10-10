@@ -3,6 +3,7 @@
 #include "comm/logging.h"
 #include "comm/comm.h"
 #include "net_util.h"
+#include "data_context.h"
 
 namespace xy{
 
@@ -22,7 +23,7 @@ int Connection::recv(){
         }else if (rd < 0 && (errno == EAGAIN || errno == EWOULDBLOCK)){   // 读取完了
             break;
         }else if(rd <= 0){  // 读取出错了
-            error("recv fd:%d fail, ret: %d", _fd, rd);
+            info("recv fd:%d fail, ret: %d", _fd, rd);
             return -1;
         }else{
             _recvBuffer.addSize(rd);
@@ -40,7 +41,7 @@ int Connection::recv(){
     }
 
     // 处理一个完整的包
-    auto ptr = std::make_shared<SendContext>(_fd, _ip, _port);
+    auto ptr = std::make_shared<RecvContext>(_fd, _ip, _port);
     ptr->buffer() = std::move(msg.toVecChar());
 
     _pAcceptor->pushRecvQueue(ptr);

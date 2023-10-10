@@ -5,7 +5,7 @@
 #include <vector>
 #include <memory>
 #include "xy_codec.h"
-#include "connection.h"
+#include "net_comm.h"
 
 namespace xy{
 
@@ -30,12 +30,14 @@ public:
         return _protocolParseFunc;
     }
 
-    void pushRecvQueue(const std::shared_ptr<SendContext>& context);
+    void addHandle();
+
+    void pushRecvQueue(const std::shared_ptr<RecvContext>& context);
 
 private:
     Ip4Addr                 _addr;
     Socket                  _sock;
-    std::vector<Handler*>   _vHandle;
+    std::vector<HandlerPtr> _vHandle;
     int                     _timeoutSec;  // 链接多少秒后算超时
 
     ProtocolParserFunc      _protocolParseFunc;
