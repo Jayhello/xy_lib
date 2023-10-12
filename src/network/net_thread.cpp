@@ -3,6 +3,7 @@
 #include "xy_server.h"
 #include "comm/logging.h"
 #include "comm/comm.h"
+#include "data_context.h"
 
 namespace xy{
 
@@ -25,6 +26,16 @@ void NetThread::terminate(){
     _noticer.notify();
 }
 
+void NetThread::sendResp(const std::shared_ptr<SendContext>& ctx){
+
+    _noticer.notify();
+}
+
+void NetThread::close(const std::shared_ptr<SendContext>& ctx){
+
+    _noticer.notify();
+}
+
 void NetThread::processNet(const epoll_event &ev){
     int fd = ev.data.fd;
 
@@ -40,11 +51,15 @@ void NetThread::processNet(const epoll_event &ev){
     }
 
     if(Epoller::readEvent(ev)){
-
+        ptrCon->recvData();
     }
 
     if(Epoller::writeEvent(ev)){
-
+        if(ptrCon->getSendBuffer().empty()){
+            ptrCon->disableWrite();
+        }else{
+            ptrCon->sendData();
+        }
     }
 }
 

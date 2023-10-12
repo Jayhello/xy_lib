@@ -4,6 +4,7 @@
 #include "comm/comm.h"
 #include "net_util.h"
 #include "data_context.h"
+#include "net_thread.h"
 
 namespace xy{
 
@@ -14,7 +15,7 @@ Connection::Connection(int fd, AcceptorPtr pAcceptor, NetThread* pTh, const stri
 Connection::~Connection(){
 }
 
-int Connection::recv(){
+int Connection::recvData(){
     while(true){
         _recvBuffer.makeRoom();   // 保证有空余的数据
         int rd = ::read(_fd, _recvBuffer.end(), _recvBuffer.space());
@@ -45,6 +46,55 @@ int Connection::recv(){
     ptr->buffer() = std::move(msg.toVecChar());
 
     _pAcceptor->pushRecvQueue(ptr);
+
+    return 0;
+}
+
+void Connection::enableWrite(){
+    _pTh->getEpoller()->mod(_fd, 0, EPOLLIN | EPOLLOUT);
+    _bWriteEnabled = true;
+}
+
+void Connection::disableWrite(){
+    _pTh->getEpoller()->mod(_fd, 0, EPOLLIN);
+    _bWriteEnabled = false;
+}
+
+int Connection::sendData(const std::vector<char>& data){
+    _sendBuffer.append(data.data(), data.size());
+    return sendData();
+}
+
+int Connection::sendData(){
+    while(not _sendBuffer.empty()){
+        int rd = ::send(_fd, _sendBuffer.data(), _sendBuffer.size(), 0);
+        if(rd < 0){
+            if(errno == EINTR){
+                continue;
+            }else if(errno == EAGAIN || errno == EWOULDBLOCK){
+                if(not _bWriteEnabled){
+                    enableWrite();
+                }
+                break;
+            }else{
+                info("recv fd:%d fail, ret: %d", _fd, rd);
+                return -1;
+            }
+        }else if(0 == rd){
+            info("fd:%d send ret 0 close", _fd);
+            return -1;
+        }else{
+            _sendBuffer.consume(rd);
+            if(_sendBuffer.empty()){   // 数据发送完了
+                if(_bWriteEnabled){
+                    disableWrite();
+                }
+                break;
+            }
+        }
+    }
+
+    // 这里可以加些处理逻辑例如包积压太多, 关闭链接
 
     return 0;
 }

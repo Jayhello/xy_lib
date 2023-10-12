@@ -20,6 +20,16 @@ public:
 
     void terminate();
 
+    void sendResp(const std::shared_ptr<SendContext>& ctx);
+
+    void close(const std::shared_ptr<SendContext>& ctx);
+
+protected:
+    friend class Connection;
+    Epoller* getEpoller(){
+        return &_ep;
+    }
+
 protected:
     // 处理fd的读写事件
     void processNet(const epoll_event &ev);

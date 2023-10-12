@@ -4,7 +4,7 @@
 
 namespace xy{
 
-class  Handler : public Thread{
+class Handler : public Thread{
 public:
     Handler() = default;
 
@@ -21,7 +21,9 @@ public:
 protected:
     virtual void handle() = 0;
 
+    void sendResp(const std::shared_ptr<SendContext>& ctx);
 
+    void close(const std::shared_ptr<SendContext>& ctx);
 
 private:
     ServerPtr     _pServer;

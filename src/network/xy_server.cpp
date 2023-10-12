@@ -1,5 +1,6 @@
 #include "xy_server.h"
 #include "net_util.h"
+#include "data_context.h"
 #include "comm/logging.h"
 #include <errno.h>
 
@@ -9,7 +10,6 @@ Server::Server():_ep(), _stop(false), _iThreadNum(1){
 }
 
 Server::~Server(){
-
 }
 
 int Server::init(){
@@ -98,7 +98,15 @@ void Server::terminate(){
 
 }
 
+void Server::sendResp(const std::shared_ptr<SendContext>& ctx){
+    auto pThread = getNetThread(ctx->fd());
 
+}
+
+void Server::close(const std::shared_ptr<SendContext>& ctx){
+    auto pThread = getNetThread(ctx->fd());
+
+}
 
 
 

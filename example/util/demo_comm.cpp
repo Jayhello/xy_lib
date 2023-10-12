@@ -5,6 +5,7 @@
 #include "comm/comm.h"
 #include "comm/xy_thread.h"
 #include "comm/slice.h"
+#include "comm/block_queue.h"
 
 int main(int argc, char** argv){
 
@@ -12,7 +13,8 @@ int main(int argc, char** argv){
 
 //    xy::simple_log();
 //    xy::simple_thread();
-    xy::simple_slice();
+//    xy::simple_slice();
+    xy::simple_block_que();
 
     return 0;
 }
@@ -54,6 +56,34 @@ void simple_slice(){
         std::cout << std::endl;
     }
 
+}
+
+void simple_block_que(){
+    BlockQueue<int> blockQueue;
+
+    std::thread produce([&blockQueue]{
+        for(int i = 0; i < 100; ++i){
+            blockQueue.push_back(i);
+            info("produce que: %d", i);
+            sleep(1);
+        }
+    });
+
+    std::thread consume([&blockQueue]{
+        for(int i = 0; i < 100; ++i){
+            int a = 0;
+            bool res = blockQueue.pop_wait(&a, 500);
+            info("consume que res: %d, v: %d", res, a);
+        }
+    });
+
+    produce.detach();
+    consume.detach();
+
+    sleep(10);
+    info("exit produce_consume");
+
+    blockQueue.setStop();
 }
 
 } // xy

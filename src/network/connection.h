@@ -20,12 +20,35 @@ public:
     }
 
     // ret < 0 接受错误
-    int recv();
+    int recvData();
+
+    // 追加写数据
+    int sendData(const std::vector<char>& data);
+
+    // 发送, 或者写事件来了调用
+    int sendData();
 
     int getTimeout()const{return _timeoutSec;}
 
     int setTimeout(int timeout){
         _timeoutSec = timeout;
+    }
+
+    bool writeEnabled()const{
+        return _bWriteEnabled;
+    }
+
+    // 使得 fd 有写通知事件(一般不会有)
+    void enableWrite();
+
+    // 取消 fd 有写通知事件
+    void disableWrite();
+
+protected:
+    friend class NetThread;
+
+    Buffer& getSendBuffer(){
+        return _sendBuffer;
     }
 
 protected:
@@ -37,6 +60,7 @@ private:
     NetThread*          _pTh;
     std::string         _ip;
     uint16_t            _port;
+    bool                _bWriteEnabled;
     int                 _timeoutSec;  // 多少秒后算超时
     volatile  uint32_t  _uid;
 

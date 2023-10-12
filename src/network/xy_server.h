@@ -4,6 +4,7 @@
 #include <vector>
 #include <map>
 #include "net_thread.h"
+#include "net_comm.h"
 
 namespace xy{
 
@@ -21,6 +22,10 @@ public:
 
     void terminate();
 
+    void sendResp(const std::shared_ptr<SendContext>& ctx);
+
+    void close(const std::shared_ptr<SendContext>& ctx);
+
 protected:
     int accept(int fd);
 
@@ -32,6 +37,7 @@ protected:
         return cfd % _iThreadNum;
     }
 
+private:
     void startThread();
 
     void stopThread();
