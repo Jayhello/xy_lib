@@ -6,6 +6,8 @@
 #include <memory>
 #include "xy_codec.h"
 #include "net_comm.h"
+#include "comm/block_queue.h"
+#include "comm/xy_monitor.h"
 
 namespace xy{
 
@@ -32,15 +34,32 @@ public:
 
     void addHandle();
 
+    HandlerPtr getHandle(int fd);
+
+protected:
+    friend class Handler;
+
     void pushRecvQueue(const std::shared_ptr<RecvContext>& context);
 
-private:
-    Ip4Addr                 _addr;
-    Socket                  _sock;
-    std::vector<HandlerPtr> _vHandle;
-    int                     _timeoutSec;  // 链接多少秒后算超时
+    // 返回空指针的话, 说明超时了
+    std::shared_ptr<RecvContext> popRecvQueue(int idx, int timeoutMs);
 
-    ProtocolParserFunc      _protocolParseFunc;
+private:
+    using RecvQueue = BlockQueue<std::shared_ptr<RecvContext>>;
+    struct RecvData{
+        RecvQueue   _recvQueue;
+//        Monitor     _monitor;
+    };
+
+private:
+    Ip4Addr                             _addr;
+    Socket                              _sock;
+    std::vector<HandlerPtr>             _vHandle;
+    size_t                              _iHandleNum;
+    vector<std::shared_ptr<RecvData>>   _vRecvData;
+    int                                 _timeoutSec = 0;  // 链接多少秒后算超时
+
+    ProtocolParserFunc                  _protocolParseFunc;
 };
 
 using AcceptorPtr = Acceptor*;

@@ -100,7 +100,7 @@ void Server::terminate(){
 
 void Server::sendResp(const std::shared_ptr<SendContext>& ctx){
     auto pThread = getNetThread(ctx->fd());
-
+    pThread->sendResp(ctx);
 }
 
 void Server::close(const std::shared_ptr<SendContext>& ctx){

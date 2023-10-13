@@ -18,12 +18,18 @@ public:
 
     void setIndex(int idx){_iHandleIdx = idx;}
 
+    void process(const std::shared_ptr<RecvContext>& ctx);
+
 protected:
-    virtual void handle() = 0;
+    virtual void handle(const std::shared_ptr<RecvContext>& ctx) = 0;
+
+    virtual void handleOverload(const std::shared_ptr<RecvContext>& ctx);
+
+    virtual void handleTimeout(const std::shared_ptr<RecvContext>& ctx);
 
     void sendResp(const std::shared_ptr<SendContext>& ctx);
 
-    void close(const std::shared_ptr<SendContext>& ctx);
+    void close(const std::shared_ptr<RecvContext>& ctx);
 
 private:
     ServerPtr     _pServer;
