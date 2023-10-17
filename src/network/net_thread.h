@@ -3,6 +3,7 @@
 #include "xy_epoll.h"
 #include "connection.h"
 #include <vector>
+#include "comm/block_queue.h"
 
 namespace xy{
 
@@ -39,6 +40,8 @@ protected:
 
     Connection *getConnectionPtr(int fd) { return _conList.get(fd); }
 
+    using SendQueue = BlockQueue<std::shared_ptr<SendContext>>;
+
 private:
     int             _threadIdx;
     Server*         _pServer;
@@ -46,6 +49,7 @@ private:
     EpollNotice     _noticer;
     bool            _bTerminate = false;
     ConnectionList  _conList;
+    SendQueue       _sendQueue;
 };
 
 } // xy

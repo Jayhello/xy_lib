@@ -90,6 +90,7 @@ void Server::stopThread(){
 }
 
 void Server::terminate(){
+    _stop = true;
 
     for(int i = 0; i < _iThreadNum; ++i){
         _vNetThread[i]->terminate();

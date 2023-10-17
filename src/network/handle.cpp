@@ -7,7 +7,16 @@
 namespace xy{
 
 void Handler::run(){
+    loop();   // 这里之所以定义了loop, 是为了如果业务自定义run的时候扩展性好点
+}
 
+void Handler::loop(){
+    while(_pServer->hasTerminate()){
+        std::shared_ptr<RecvContext> ctx = _pAcceptor->popRecvQueue(_iHandleIdx, 100);
+        if(ctx){  // 取出了数据
+            process(ctx);
+        }
+    }
 }
 
 void Handler::process(const std::shared_ptr<RecvContext>& ctx){

@@ -27,13 +27,45 @@ void NetThread::terminate(){
 }
 
 void NetThread::sendResp(const std::shared_ptr<SendContext>& ctx){
-
+    _sendQueue.push_back(ctx);
     _noticer.notify();
 }
 
 void NetThread::close(const std::shared_ptr<SendContext>& ctx){
 
     _noticer.notify();
+}
+
+
+void NetThread::processPipe(){
+    while(not _sendQueue.empty()){
+        std::shared_ptr<SendContext> ctx;
+        bool res = _sendQueue.pop_wait(&ctx, 100);   // 到了这里基本都是有
+
+        if(not res or (!ctx.get())){
+            continue;
+        }
+
+        ConnectionPtr pConn = getConnectionPtr(ctx->fd());
+        if(nullptr == pConn){
+            continue;
+        }
+
+        switch(ctx->cmd()){
+            case 's':{
+                int ret = pConn->sendData(ctx->buffer());
+                if(ret < 0){
+
+                }
+                break;
+            }case 'c':{
+
+                break;
+            }default{
+
+            }
+        }
+    }
 }
 
 void NetThread::processNet(const epoll_event &ev){
@@ -61,10 +93,6 @@ void NetThread::processNet(const epoll_event &ev){
             ptrCon->sendData();
         }
     }
-}
-
-void NetThread::processPipe(){
-
 }
 
 void NetThread::run(){

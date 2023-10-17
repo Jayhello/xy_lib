@@ -16,11 +16,13 @@ public:
 
     void setAcceptor(AcceptorPtr pa){_pAcceptor = pa;}
 
-    void setIndex(int idx){_iHandleIdx = idx;}
+    void setIndex(size_t idx){_iHandleIdx = idx;}
 
     void process(const std::shared_ptr<RecvContext>& ctx);
 
 protected:
+    void loop();
+
     virtual void handle(const std::shared_ptr<RecvContext>& ctx) = 0;
 
     virtual void handleOverload(const std::shared_ptr<RecvContext>& ctx);
@@ -34,7 +36,7 @@ protected:
 private:
     ServerPtr     _pServer;
     AcceptorPtr   _pAcceptor;
-    int           _iHandleIdx;
+    size_t        _iHandleIdx;
 };
 
 } // xy

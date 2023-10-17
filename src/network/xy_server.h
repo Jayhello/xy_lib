@@ -20,7 +20,10 @@ public:
 
     void waitForShutdown();
 
+    // 停止服务
     void terminate();
+
+    bool hasTerminate()const{return _stop;}
 
     void sendResp(const std::shared_ptr<SendContext>& ctx);
 

@@ -8,13 +8,18 @@
 #include "net_comm.h"
 #include "comm/block_queue.h"
 #include "comm/xy_monitor.h"
+#include "comm/xy_exception.h"
 
 namespace xy{
 
 class Acceptor{
 public:
-    // host填空则是 0.0.0.0
-    int bind(short port, const std::string &host = "");
+    Acceptor(ServerPtr pServer);
+
+    ~Acceptor();
+
+    // 初始化scoket, host填空则是 0.0.0.0
+    int init(short port, const std::string &host = "");
 
     int fd()const{return _sock.getfd();}
 
@@ -32,7 +37,31 @@ public:
         return _protocolParseFunc;
     }
 
-    void addHandle();
+    ServerPtr getServer(){return _pServer;}
+
+    template<typename HandlerType, typename... Args>
+    void setHandle(size_t num, Args&& ... args){
+        if(not _vHandle.empty()){
+            throw Exception("[Acceptor] has set handle already!!!!");
+        }
+
+        _iHandleNum = num;
+        _vHandle.reserve(num);
+        for(size_t i = 0; i < num; ++i){
+            HandlerPtr ptr = new HandlerType(args...);
+
+            ptr->setIndex(i);
+            ptr->setAcceptor(this);
+            ptr->setServer(getServer());
+
+            _vHandle.push_back(ptr);
+        }
+
+        _vRecvData.reserve(num);
+        for(size_t i = 0; i < num; ++i){
+            _vRecvData.push_back(std::make_shared<RecvData>());
+        }
+    }
 
     HandlerPtr getHandle(int fd);
 
@@ -42,7 +71,7 @@ protected:
     void pushRecvQueue(const std::shared_ptr<RecvContext>& context);
 
     // 返回空指针的话, 说明超时了
-    std::shared_ptr<RecvContext> popRecvQueue(int idx, int timeoutMs);
+    std::shared_ptr<RecvContext> popRecvQueue(size_t idx, int timeoutMs);
 
 private:
     using RecvQueue = BlockQueue<std::shared_ptr<RecvContext>>;
@@ -52,6 +81,7 @@ private:
     };
 
 private:
+    ServerPtr                           _pServer;
     Ip4Addr                             _addr;
     Socket                              _sock;
     std::vector<HandlerPtr>             _vHandle;
