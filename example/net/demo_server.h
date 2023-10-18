@@ -2,6 +2,6 @@
 
 namespace xy{
 
-void test_epoll();
+void simple_server();
 
 } // xy

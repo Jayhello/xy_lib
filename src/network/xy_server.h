@@ -10,7 +10,7 @@ namespace xy{
 
 class Server{
 public:
-    Server();
+    Server(int iThreadNum = 1);
 
     ~Server();
 
@@ -41,9 +41,13 @@ protected:
     }
 
 private:
-    void startThread();
+    void startNetThread();
 
-    void stopThread();
+    void stopNetThread();
+
+    void startAcceptorHandles();
+
+    void stopAcceptorHandles();
 
 private:
     Epoller                     _ep;

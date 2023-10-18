@@ -30,7 +30,7 @@ public:
 
     int getTimeout()const{return _timeoutSec;}
 
-    int setTimeout(int timeout){
+    void setTimeout(int timeout){
         _timeoutSec = timeout;
     }
 

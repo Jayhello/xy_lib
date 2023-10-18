@@ -25,7 +25,7 @@ public:
 
     int getTimeout()const{return _timeoutSec;}
 
-    int setTimeout(int timeout){
+    void setTimeout(int timeout){
         _timeoutSec = timeout;
     }
 
@@ -35,6 +35,15 @@ public:
 
     ProtocolParserFunc& getProtocol(){
         return _protocolParseFunc;
+    }
+
+    template<typename CodecType>
+    void setCodec(){
+        _pCodec = new CodecType();
+//        _protocolParseFunc = std::bind(&CodecType::tryDecode, _pCodec, std::placeholders::_1, std::placeholders::_2);
+        _protocolParseFunc = [=](Slice data, Slice &msg){
+            return _pCodec->tryDecode(data, msg);
+        };
     }
 
     ServerPtr getServer(){return _pServer;}
@@ -65,8 +74,13 @@ public:
 
     HandlerPtr getHandle(int fd);
 
+    const std::vector<HandlerPtr>& getHandles(){
+        return _vHandle;
+    }
+
 protected:
     friend class Handler;
+    friend class Connection;
 
     void pushRecvQueue(const std::shared_ptr<RecvContext>& context);
 
@@ -90,6 +104,7 @@ private:
     int                                 _timeoutSec = 0;  // 链接多少秒后算超时
 
     ProtocolParserFunc                  _protocolParseFunc;
+    CodecBase*                          _pCodec;
 };
 
 using AcceptorPtr = Acceptor*;

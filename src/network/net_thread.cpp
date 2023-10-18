@@ -61,7 +61,7 @@ void NetThread::processPipe(){
             }case 'c':{
 
                 break;
-            }default{
+            }default:{
 
             }
         }
@@ -96,6 +96,8 @@ void NetThread::processNet(const epoll_event &ev){
 }
 
 void NetThread::run(){
+    info("[NetThread] start run");
+
     while(not _bTerminate){
         int num = _ep.wait(1000);
 

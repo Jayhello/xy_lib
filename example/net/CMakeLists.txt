@@ -21,6 +21,18 @@ add_executable(demo_net demo_net.cpp)
 target_link_libraries(demo_net
         comm_lib
         network_lib
+)
+
+add_executable(demo_server demo_server.cpp)
+target_link_libraries(demo_server
+        comm_lib
+        network_lib
+)
+
+add_executable(demo_client demo_client.cpp)
+target_link_libraries(demo_client
+        comm_lib
+        network_lib
         )
 
 #add_executable(demo_rwlock demo_rwlock.cpp)

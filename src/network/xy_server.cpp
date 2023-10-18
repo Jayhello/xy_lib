@@ -6,7 +6,7 @@
 
 namespace xy{
 
-Server::Server():_ep(), _stop(false), _iThreadNum(1){
+Server::Server(int iThreadNum):_ep(), _stop(false), _iThreadNum(iThreadNum){
 }
 
 Server::~Server(){
@@ -56,7 +56,9 @@ void Server::waitForShutdown(){
         _ep.add(ptr->fd(), 0, EPOLLIN);
     }
 
-    startThread();
+    startNetThread();
+
+    startAcceptorHandles();
 
     while(not _stop){
         int num = _ep.wait(300);
@@ -72,19 +74,39 @@ void Server::waitForShutdown(){
         }
     }
 
-    stopThread();
+    stopNetThread();
+
+    stopAcceptorHandles();
 }
 
-void Server::startThread(){
+void Server::startNetThread(){
     for(int i = 0; i < _iThreadNum; ++i){
         _vNetThread[i]->start();
     }
 }
 
-void Server::stopThread(){
+void Server::stopNetThread(){
     for(int i = 0; i < _iThreadNum; ++i){
         if(_vNetThread[i]->isActive()){
             _vNetThread[i]->getThreadControl().join();
+        }
+    }
+}
+
+void Server::startAcceptorHandles(){
+    for(auto pa : _vAcceptor){
+        for(auto ph : pa->getHandles()){
+            ph->start();
+        }
+    }
+}
+
+void Server::stopAcceptorHandles(){
+    for(auto pa : _vAcceptor){
+        for(auto ph : pa->getHandles()){
+            if(ph->isActive()){
+                ph->getThreadControl().join();
+            }
         }
     }
 }
@@ -96,7 +118,7 @@ void Server::terminate(){
         _vNetThread[i]->terminate();
     }
 
-
+    // handle 那里会判断stop状态
 }
 
 void Server::sendResp(const std::shared_ptr<SendContext>& ctx){

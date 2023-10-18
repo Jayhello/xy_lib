@@ -38,6 +38,8 @@ public:
                     info("fd: %d can_read ch: %c, ret: %d", ev.data.fd, ch, tmp);
                 }else if(Epoller::writeEvent(ev)){
                     info("fd: %d can_write", ev.data.fd);
+                }else{
+                    break;
                 }
             }
         }

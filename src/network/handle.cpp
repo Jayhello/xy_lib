@@ -7,6 +7,7 @@
 namespace xy{
 
 void Handler::run(){
+    info("[Handler] start run");
     loop();   // 这里之所以定义了loop, 是为了如果业务自定义run的时候扩展性好点
 }
 
@@ -45,7 +46,7 @@ void Handler::handleTimeout(const std::shared_ptr<RecvContext>& ctx){
 }
 
 void Handler::sendResp(const std::shared_ptr<SendContext>& ctx){
-
+    _pServer->sendResp(ctx);
 }
 
 void Handler::close(const std::shared_ptr<RecvContext>& ctx){

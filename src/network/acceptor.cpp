@@ -16,6 +16,8 @@ Acceptor::~Acceptor(){
 int Acceptor::init(short port, const std::string &host){
     _sock.createSocket();
     _sock.bind(host, port);
+
+    return 0;   // 待后面加返回码做错误判断
 }
 
 HandlerPtr Acceptor::getHandle(int fd){
