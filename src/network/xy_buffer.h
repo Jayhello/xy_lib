@@ -62,6 +62,10 @@ struct Buffer {
     }
     operator Slice() { return Slice(data(), size()); }
 
+    std::string toString() const {
+        return std::string(buf_, size());
+    }
+
 private:
     char *buf_;
     size_t b_, e_, cap_, exp_;

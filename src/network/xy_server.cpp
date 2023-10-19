@@ -6,7 +6,7 @@
 
 namespace xy{
 
-Server::Server(int iThreadNum):_ep(), _stop(false), _iThreadNum(iThreadNum){
+Server::Server(int iThreadNum):_ep("server"), _stop(false), _iThreadNum(iThreadNum){
 }
 
 Server::~Server(){
@@ -37,11 +37,16 @@ int Server::accept(int fd){
         return -1;
     }
 
-    debug("fd: %d accept fd: %d, %s:%d", fd, cfd, sIp.c_str(), iPort);
+    debug("fd: %d accept client fd: %d, %s:%d", fd, cfd, sIp.c_str(), iPort);
 
 //    if(max_connection){
 //        close()
 //    }
+    setNonBlock(cfd);
+    setKeepAlive(cfd);
+    setTcpNoDelay(cfd);
+    setCloseWaitDefault(cfd);
+
     auto pAc = _mFdAcceptor[fd];
     auto pThread = getNetThread(cfd);
     ConnectionPtr pc = new Connection(cfd, pAc, pThread, sIp, iPort, pAc->getTimeout());
@@ -53,6 +58,7 @@ int Server::accept(int fd){
 
 void Server::waitForShutdown(){
     for(auto& ptr : _vAcceptor){
+        trace("acceptor fd: %d", ptr->fd());
         _ep.add(ptr->fd(), 0, EPOLLIN);
     }
 
@@ -61,7 +67,9 @@ void Server::waitForShutdown(){
     startAcceptorHandles();
 
     while(not _stop){
-        int num = _ep.wait(300);
+        int num = _ep.wait(3000);
+
+//        trace("[Server] wait, ret: %d", num);
 
         for(int i = 0; i < num; ++i){
             const epoll_event &ev = _ep.get(i);

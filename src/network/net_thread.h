@@ -25,6 +25,8 @@ public:
 
     void close(const std::shared_ptr<SendContext>& ctx);
 
+    void delConnection(ConnectionPtr);
+
 protected:
     friend class Connection;
     Epoller* getEpoller(){
@@ -38,18 +40,18 @@ protected:
     // 内部事件
     void processPipe();
 
-    Connection *getConnectionPtr(int fd) { return _conList.get(fd); }
+    Connection *getConnectionPtr(int fd) { return _conManager.get(fd); }
 
     using SendQueue = BlockQueue<std::shared_ptr<SendContext>>;
 
 private:
-    int             _threadIdx;
-    Server*         _pServer;
-    Epoller         _ep;
-    EpollNotice     _noticer;
-    bool            _bTerminate = false;
-    ConnectionList  _conList;
-    SendQueue       _sendQueue;
+    Server*             _pServer;
+    int                 _threadIdx;
+    Epoller             _ep;
+    EpollNotice         _noticer;
+    bool                _bTerminate = false;
+    ConnectionManager   _conManager;
+    SendQueue           _sendQueue;
 };
 
 } // xy

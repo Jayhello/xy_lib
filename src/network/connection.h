@@ -70,15 +70,17 @@ private:
 
 using ConnectionPtr = Connection*;
 
-class ConnectionList{
+class ConnectionManager{
 public:
-    ConnectionList(NetThread*);
+    ConnectionManager(NetThread*);
 
-    ~ConnectionList();
+    ~ConnectionManager();
 
     ConnectionPtr get(int fd);
 
     void add(ConnectionPtr cPtr, long lTimeoutTs);
+
+    void del(ConnectionPtr cPtr);
 
     void checkTimeout(time_t iCurTime);
 

@@ -73,6 +73,10 @@ int doWrite(int fd, const string& sData){
     return ::write(fd, sData.c_str(), sData.size());
 }
 
+int doWrite(int fd, const char* str, size_t size){
+    return ::write(fd, str, size);
+}
+
 int doRead(int fd, string& sData, size_t iReadSize){
     // 如下不能直接read(fd, string) 有问题
     //    sData.reserve(iReadSize + 1);
@@ -130,6 +134,24 @@ int setNonBlock(int fd, bool value) {
         return fcntl(fd, F_SETFL, flags | O_NONBLOCK);
     }
     return fcntl(fd, F_SETFL, flags & ~O_NONBLOCK);
+}
+
+int setKeepAlive(int fd){
+    int flag = 1;
+    return setSocketOpt(fd, SO_REUSEPORT, (void*)(&flag), (socklen_t)(sizeof(flag)), SOL_SOCKET);
+}
+
+int setTcpNoDelay(int fd){
+    int flag = 1;
+    return setSocketOpt(fd, TCP_NODELAY, (void*)(&flag), (socklen_t)(sizeof(flag)), IPPROTO_TCP);
+}
+
+int setCloseWaitDefault(int fd){
+    linger stLinger;
+    stLinger.l_onoff = 0;
+    stLinger.l_linger = 0;
+
+    return setSocketOpt(fd, SO_LINGER, (void*)(&stLinger), (socklen_t)(sizeof(stLinger)), SOL_SOCKET);
 }
 
 void setNoBlock(int fd){

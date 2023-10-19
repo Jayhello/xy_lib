@@ -28,6 +28,8 @@ int createTcpServerSocket(const string& sIp, int iPort);
 // todo read 这里的参数 sData 是否可以优化下, const char* str, len
 int doWrite(int fd, const string& sData);
 
+int doWrite(int fd, const char* str, size_t size);
+
 // < 0 错误,  = 0 对方关闭了链接, > 0 写的数据size
 int doRead(int fd, string& sData, size_t iReadSize);
 
@@ -40,6 +42,12 @@ int doRecv(int fd, string& sData, size_t iReadSize);
 int doClose(int fd);
 
 int setNonBlock(int fd, bool value = true);
+
+int setKeepAlive(int fd);
+
+int setTcpNoDelay(int fd);
+
+int setCloseWaitDefault(int fd);
 
 int setReuseAddr(int fd);
 

@@ -26,7 +26,7 @@ public:
 protected:
     virtual void handle(const std::shared_ptr<RecvContext>& ctx)override{
         ScopeLog Log;
-        Log << "recv: " << ctx->ip() << ":" << ctx->port()<< "recv_data: " << ctx->buffer().data();
+        Log << "[EchoHandle] recv: " << ctx->ip() << ":" << ctx->port()<< ", recv_data: " << ctx->buffer().data();
 
         shared_ptr<SendContext> send = std::make_shared<SendContext>(ctx->fd(), ctx->ip(), ctx->port(), 's');
         send->buffer() = ctx->buffer();
@@ -36,12 +36,12 @@ protected:
 
 
 void simple_server(){
-    Server server(2);
+    Server server(1);
     server.init();
     info("server init");
 
     Acceptor acceptor(&server);
-    acceptor.init(8080);
+    acceptor.init(8088, "127.0.0.1");
     acceptor.setCodec<LengthCodec>();
     acceptor.setHandle<EchoHandler>(3);
     info("acceptor init");

@@ -3,12 +3,13 @@
 //
 #pragma once
 #include <sys/epoll.h>
+#include <string>
 
 namespace xy{
 
 class Epoller{
 public:
-    Epoller();
+    Epoller(const std::string& name = "");
 
     ~Epoller();
 
@@ -30,6 +31,8 @@ public:
     // wait 之后可以用此接口获取触发的事件
     epoll_event &get(int i);// { assert(_pevs != 0); return _pevs[i]; }
 
+    std::string toString()const;
+
     // 是否有读事件
     static bool readEvent(const epoll_event &ev);
 
@@ -43,6 +46,7 @@ protected:
     int ctrl(int fd, uint64_t iValue, uint32_t events, int op);
 
 private:
+    std::string _sName;
     int         _epFd;
     epoll_event *_pEvs;   // 事件集合
     int         _size;
@@ -58,6 +62,8 @@ public:
     int init(Epoller *pEp);
 
     int notify(char c = 'c');
+
+    int readNotify(char& c);
 
     // read notify写入的字符
     static int read(int fd, char& c);

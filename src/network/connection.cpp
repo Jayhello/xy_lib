@@ -19,6 +19,7 @@ int Connection::recvData(){
     while(true){
         _recvBuffer.makeRoom();   // 保证有空余的数据
         int rd = ::read(_fd, _recvBuffer.end(), _recvBuffer.space());
+        trace("read fd: %d, size: %d", _fd, rd);
         if(rd < 0 and errno == EINTR){
             continue;
         }else if (rd < 0 && (errno == EAGAIN || errno == EWOULDBLOCK)){   // 读取完了
@@ -33,6 +34,7 @@ int Connection::recvData(){
 
     Slice msg;
     int ret = _pAcceptor->getProtocol()(_recvBuffer, msg);
+    trace("parse ret: %d, size: %d %s", ret, int(msg.size()), msg.data());
 
     if(0 == ret){       // 没有收到完整的包
         return 0;
@@ -72,7 +74,7 @@ int Connection::sendData(){
             if(errno == EINTR){
                 continue;
             }else if(errno == EAGAIN || errno == EWOULDBLOCK){
-                if(not _bWriteEnabled){
+                if(not _bWriteEnabled and (not _sendBuffer.empty())){
                     enableWrite();
                 }
                 break;
@@ -101,13 +103,13 @@ int Connection::sendData(){
 
 // --------------------------------------------------------------------------------------------------------------
 
-ConnectionList::ConnectionList(NetThread* pth):_pNetThread(pth){
+ConnectionManager::ConnectionManager(NetThread* pth):_pNetThread(pth){
 }
 
-ConnectionList::~ConnectionList(){
+ConnectionManager::~ConnectionManager(){
 }
 
-ConnectionPtr ConnectionList::get(int fd){
+ConnectionPtr ConnectionManager::get(int fd){
     auto it = _mFdConPtr.find(fd);
 
     if(it != _mFdConPtr.end()){
@@ -117,12 +119,16 @@ ConnectionPtr ConnectionList::get(int fd){
     return nullptr;
 }
 
-void ConnectionList::add(ConnectionPtr cPtr, long lTimeoutTs){
+void ConnectionManager::add(ConnectionPtr cPtr, long lTimeoutTs){
     _mFdConPtr[cPtr->fd()] = cPtr;
     _mTimeoutTsFd.insert(make_pair(lTimeoutTs, cPtr->fd()));
 }
 
-void ConnectionList::checkTimeout(time_t iCurTime){
+void ConnectionManager::del(ConnectionPtr cPtr){
+    _mFdConPtr.erase(cPtr->fd());
+}
+
+void ConnectionManager::checkTimeout(time_t iCurTime){
 
 }
 

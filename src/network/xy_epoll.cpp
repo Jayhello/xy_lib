@@ -9,10 +9,11 @@
 #include <cstring>
 #include "net_util.h"
 #include "comm/logging.h"
+#include "comm/comm.h"
 
 namespace xy{
 
-Epoller::Epoller():_epFd(-1), _pEvs(nullptr), _size(100){}
+Epoller::Epoller(const std::string& name):_sName(name), _epFd(-1), _pEvs(nullptr), _size(100){}
 
 Epoller::~Epoller(){
     if(nullptr != _pEvs){
@@ -22,12 +23,17 @@ Epoller::~Epoller(){
     close();
 }
 
+std::string Epoller::toString()const{
+    return format("[name:%s, fd:%d]", _sName.c_str(), _epFd);
+}
+
 void Epoller::create(int iSize){
     _epFd = epoll_create(iSize);
 
     _size = iSize;
     _pEvs = new epoll_event[_size];
     bzero(_pEvs, sizeof(*_pEvs) * _size);
+    debug("create epoll: %s", toString().c_str());
 }
 
 void Epoller::close(){
@@ -135,8 +141,13 @@ int EpollNotice::notify(char c){
 //    return _pEp->mod(_fd, _fd, EPOLLIN);
 //    return ::write(_fd, &c, 1);
     int r = write(_wakeupFds[1], &c, 1);
+//    int r = write(_wakeupFds[1], "", 1);
     fatalif(r <= 0, "write error wd %d %d %s", r, errno, strerror(errno));
     return r;
+}
+
+int EpollNotice::readNotify(char& c){
+    return ::read(_wakeupFds[0], &c, 1);
 }
 
 int EpollNotice::read(int fd, char& c){

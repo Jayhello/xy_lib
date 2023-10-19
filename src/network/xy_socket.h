@@ -40,6 +40,9 @@ public:
 
     void listen(int connBackLog);
 
+    // (简单的同步链接)host填空则是 0.0.0.0
+    int connect(const std::string &host, short port);
+
     void setblock(bool bBlock = false);
 
     void setNoCloseWait();

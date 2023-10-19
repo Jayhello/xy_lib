@@ -42,6 +42,17 @@ void Socket::createSocket(int iSocketType, int iDomain) {
 
 void Socket::bind(const std::string &host, short port){
     _addr = Ip4Addr(host, port);
+    int r = setReuseAddr(_fd);
+    fatalif(r, "set socket reuse option failed");
+    r = setReusePort(_fd);
+    fatalif(r, "set socket reuse port option failed");
+    r = addFdFlag(_fd, FD_CLOEXEC);
+    fatalif(r, "addFdFlag FD_CLOEXEC failed");
+
+    r = doBind(_fd, host, port);
+    fatalif(r, "bind failed");
+
+    /*
     int fd = socket(AF_INET, SOCK_STREAM, 0);
     int r = setReuseAddr(fd);
     fatalif(r, "set socket reuse option failed");
@@ -56,12 +67,18 @@ void Socket::bind(const std::string &host, short port){
         error("bind to %s failed %d %s", _addr.toString().c_str(), errno, strerror(errno));
 //        return errno;
     }
+    */
 }
 
 void Socket::listen(int connBackLog){
     if (::listen(_fd, connBackLog) < 0) {
         THROW_EXCEPTION_SYSCODE(SocketException, "[Socket::listen] listen error");
     }
+}
+
+int Socket::connect(const std::string &host, short port){
+    createSocket();
+    return doConnect(_fd, host, port);
 }
 
 void Socket::close() {

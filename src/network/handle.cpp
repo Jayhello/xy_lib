@@ -12,8 +12,8 @@ void Handler::run(){
 }
 
 void Handler::loop(){
-    while(_pServer->hasTerminate()){
-        std::shared_ptr<RecvContext> ctx = _pAcceptor->popRecvQueue(_iHandleIdx, 100);
+    while(not _pServer->hasTerminate()){
+        std::shared_ptr<RecvContext> ctx = _pAcceptor->popRecvQueue(_iHandleIdx, 3000);
         if(ctx){  // 取出了数据
             process(ctx);
         }
