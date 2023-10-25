@@ -13,4 +13,6 @@ void simple_slice();
 
 void simple_block_que();
 
+void simple_pb();
+
 } // xy

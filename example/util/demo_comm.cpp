@@ -6,6 +6,7 @@
 #include "comm/xy_thread.h"
 #include "comm/slice.h"
 #include "comm/block_queue.h"
+#include "common_pb/common.pb.h"
 
 int main(int argc, char** argv){
 
@@ -14,7 +15,8 @@ int main(int argc, char** argv){
 //    xy::simple_log();
 //    xy::simple_thread();
 //    xy::simple_slice();
-    xy::simple_block_que();
+//    xy::simple_block_que();
+    xy::simple_pb();
 
     return 0;
 }
@@ -84,6 +86,13 @@ void simple_block_que(){
     info("exit produce_consume");
 
     blockQueue.setStop();
+}
+
+void simple_pb(){
+    common::Info info;
+    info.set_id(1);
+    info.set_name("xy");
+    info.PrintDebugString();
 }
 
 } // xy

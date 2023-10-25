@@ -11,15 +11,18 @@ include_directories(./)
 #set(BOOST_INCLUDE_DIRS "${BOOST_ROOT}/include")
 #set(BOOST_LIBRARY_DIRS "${BOOST_ROOT}/lib")
 
-#find_package(Protobuf REQUIRED)
-#message("main Protobuf lib: ${PROTOBUF_LIBRARIES}, inc: ${PROTOBUF_INCLUDE_DIR}")
+find_package(Protobuf REQUIRED)
+message("main Protobuf lib: ${PROTOBUF_LIBRARIES}, inc: ${PROTOBUF_INCLUDE_DIR}")
 
 add_subdirectory(src/comm)
 
 add_subdirectory(src/network)
 
+add_subdirectory(src/common_pb)
+
 # for common.pb.h
-#include_directories(${CMAKE_CURRENT_BINARY_DIR})
+include_directories(${CMAKE_CURRENT_BINARY_DIR}/src)
+message("include current bin_dir: ${CMAKE_CURRENT_BINARY_DIR}")
 
 add_subdirectory(example/util)
 add_subdirectory(example/concurrency)

@@ -18,7 +18,11 @@ include_directories(../../src)
 #message("boost inc:${Boost_INCLUDE_DIR}")
 
 add_executable(demo_util demo_comm.cpp)
-target_link_libraries(demo_util comm_lib)
+target_link_libraries(demo_util
+        comm_lib
+        proto_lib
+        ${PROTOBUF_LIBRARIES}
+)
 
 #add_executable(demo_rwlock demo_rwlock.cpp)
 #target_link_libraries(demo_rwlock
