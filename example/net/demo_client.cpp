@@ -2,9 +2,9 @@
 #include "demo_client.h"
 #include "comm/logging.h"
 #include "comm/comm.h"
-#include "network/xy_socket.h"
-#include "network/net_util.h"
-#include "network/xy_codec.h"
+#include "network/basic/xy_socket.h"
+#include "network/basic/net_util.h"
+#include "network/codec/xy_codec.h"
 
 using namespace xy;
 
@@ -77,7 +77,7 @@ void subpackage_client(){
     string sData;
     ret = doRead(client.getfd(), sData, 1024);
     return_if(ret < 0, "read fail");
-    Log << "read_ret" << ret;
+    Log << "read_size" << ret << ", str:" << sData;
 
     Log << "succ";
 }

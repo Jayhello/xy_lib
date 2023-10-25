@@ -1,6 +1,5 @@
 #include "handle.h"
 #include "xy_server.h"
-#include "acceptor.h"
 #include "comm/logging.h"
 #include "data_context.h"
 

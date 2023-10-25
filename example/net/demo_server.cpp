@@ -2,10 +2,8 @@
 
 #include "comm/logging.h"
 #include "comm/comm.h"
-#include "network/xy_server.h"
-#include "network/handle.h"
-#include "network/acceptor.h"
-#include "network/data_context.h"
+#include "network/server/xy_server.h"
+#include "network/server/data_context.h"
 
 using namespace xy;
 

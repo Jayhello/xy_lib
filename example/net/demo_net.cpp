@@ -6,7 +6,7 @@
 #include "comm/logging.h"
 #include "comm/comm.h"
 #include "comm/xy_thread.h"
-#include "network/xy_epoll.h"
+#include "network/basic/xy_epoll.h"
 
 using namespace xy;
 

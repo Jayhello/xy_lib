@@ -1,8 +1,8 @@
 #include "connection.h"
-#include "acceptor.h"
+#include "network/server/acceptor.h"
 #include "comm/logging.h"
 #include "comm/comm.h"
-#include "net_util.h"
+#include "network/basic/net_util.h"
 #include "data_context.h"
 #include "net_thread.h"
 

@@ -1,6 +1,6 @@
 #include "xy_server.h"
-#include "net_util.h"
-#include "data_context.h"
+#include "network/basic/net_util.h"
+#include "network/server/data_context.h"
 #include "comm/logging.h"
 #include <errno.h>
 

@@ -1,7 +1,7 @@
 #pragma once
 #include "comm/xy_thread.h"
-#include "xy_epoll.h"
-#include "connection.h"
+#include "network/basic/xy_epoll.h"
+#include "network/server/connection.h"
 #include <vector>
 #include "comm/block_queue.h"
 

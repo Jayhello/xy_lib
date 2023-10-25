@@ -1,9 +1,9 @@
 #pragma once
-#include "xy_epoll.h"
-#include "acceptor.h"
+#include "network/basic/xy_epoll.h"
+#include "network/server/acceptor.h"
 #include <vector>
 #include <map>
-#include "net_thread.h"
+#include "network/server/net_thread.h"
 #include "net_comm.h"
 
 namespace xy{

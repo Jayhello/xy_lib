@@ -1,10 +1,10 @@
 #pragma once
 
-#include "xy_socket.h"
+#include "network/basic/xy_socket.h"
 #include "handle.h"
 #include <vector>
 #include <memory>
-#include "xy_codec.h"
+#include "network/codec/xy_codec.h"
 #include "net_comm.h"
 #include "comm/block_queue.h"
 #include "comm/xy_monitor.h"

@@ -5,7 +5,8 @@ project(network_lib)
 set(CMAKE_CXX_STANDARD 11)
 SET(CMAKE_CXX_FLAGS -pthread)
 
-file(GLOB COMMON_SRCS ./*.cpp ./*.h)
+# add sub dir files
+file(GLOB COMMON_SRCS ./*/*.cpp ./*/*.h)
 
 # for src/*
 include_directories(../)

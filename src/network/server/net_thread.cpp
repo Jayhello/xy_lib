@@ -3,8 +3,8 @@
 #include "xy_server.h"
 #include "comm/logging.h"
 #include "comm/comm.h"
-#include "data_context.h"
-#include "net_util.h"
+#include "network/server/data_context.h"
+#include "network/basic/net_util.h"
 
 namespace xy{
 
