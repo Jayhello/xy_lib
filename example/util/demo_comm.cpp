@@ -89,7 +89,7 @@ void simple_block_que(){
 }
 
 void simple_pb(){
-    common::Info info;
+    xy::Info info;
     info.set_id(1);
     info.set_name("xy");
     info.PrintDebugString();

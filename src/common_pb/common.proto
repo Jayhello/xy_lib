@@ -1,4 +1,4 @@
-package common;
+package xy;
 
 message Info
 {
@@ -9,33 +9,24 @@ message Info
 // rpc 调用方式
 enum ECallType
 {
-    SYNC_CALL   = 0;    // 同步
-    ASYNC_CALL  = 1;    // 异步
-    ONE_WAY     = 2;    // 单向
-    THREAD_EXIT = 3;    // 线程退出的标识
+    ECallType_Sync   = 0;    // 同步
+    ECallType_Async  = 1;    // 异步
+    ECallType_OneWay = 2;    // 单向
+//    THREAD_EXIT = 3;    // 线程退出的标识
 };
 
 enum EPackageType{
-    PB    = 0;    // protobuf
-    JSON  = 1;    // json
-};
-
-// 请求状态
-enum EReqStatus
-{
-    REQ_ING        = 0;    // 状态正常, 正在请求中
-    REQ_FINISH     = 1;    // 请求已经发出去
-    REQ_TIMEOUT    = 2;    // 请求超时
-    REQ_EXCEPTION  = 3;    // 客户端请求异常
+    EPackageType_Pb    = 0;    // protobuf
+    EPackageType_Json  = 1;    // json
 };
 
 // rpc 调用错误码
 enum ERetCode{
 
-    RET_CODE_UNKNOW_ERR = -10;
-    ERetCodeOverLoad = -9;
-    RET_CODE_UNKNOW_FUNC = -1;
-    RET_CODE_SUCC = 0;
+    ERetCode_UNKnowErr      = -10;  // 未知错误
+    ERetCode_Overload       = -9;   // 过载
+    ERetCode_UNKnowFunc     = -1;   // 函数名未知
+    ERetCode_SUCC           = 0;    // 成功
 };
 
 message RequestPacket{
@@ -44,7 +35,8 @@ message RequestPacket{
     optional string     sFuncName       = 3;
     optional uint32     cPacketType     = 4;    // EPackageType
     optional bytes      sBuffer         = 5;    // pb 序列化
-    map<string, string> context         = 6;    // 上下文
+    optional uint32     iTimeoutMs      = 6;    // 多少毫秒算超时(例如1500, 代表1500ms超时, 服务端会算收包的实际以及相应的实际, 然后判断是否超时)
+    map<string, string> context         = 7;    // 上下文
 };
 
 message ResponsePacket{
@@ -52,7 +44,16 @@ message ResponsePacket{
     optional uint32     iRequestId      = 2;
     optional uint32     cPacketType     = 3;   // EPackageType
     optional bytes      sBuffer         = 4;   // pb 序列化
-    optional int32      iRetCode        = 5;   // 返回结果 EErrorCode
+    optional int32      iRetCode        = 5;   // 返回结果 ERetCode
     optional string     sRetDesc        = 6;   // 结果描述
     map<string, string> context         = 7;   // 上下文
+};
+
+// 请求状态
+enum EReqStatus
+{
+    EReqStatus_Doing      = 0;    // 状态正常, 正在请求中
+    EReqStatus_Finish     = 1;    // 请求已经发出去
+    EReqStatus_Timeout    = 2;    // 请求超时
+    EReqStatus_Exception  = 3;    // 客户端请求异常
 };
