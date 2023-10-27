@@ -7,7 +7,12 @@ namespace xy{
 
 struct Buffer {
     Buffer() : buf_(NULL), b_(0), e_(0), cap_(0), exp_(512) {}
-    ~Buffer() { delete[] buf_; }
+    ~Buffer() {
+        if(nullptr != buf_){
+            delete[] buf_;
+            buf_ = nullptr;
+        }
+    }
     void clear() {
         delete[] buf_;
         buf_ = NULL;
