@@ -34,7 +34,7 @@ message RequestPacket{
     optional uint32     iRequestId      = 2;
     optional string     sFuncName       = 3;
     optional uint32     cPacketType     = 4;    // EPackageType
-    optional bytes      sBuffer         = 5;    // pb 序列化
+    optional bytes      sBuffer         = 5;    // 实际接口请求的协议的 pb 序列化(例如接口 search的 SearchReq)
     optional uint32     iTimeoutMs      = 6;    // 多少毫秒算超时(例如1500, 代表1500ms超时, 服务端会算收包的实际以及相应的实际, 然后判断是否超时)
     map<string, string> context         = 7;    // 上下文
 };
