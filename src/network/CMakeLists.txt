@@ -10,6 +10,7 @@ file(GLOB COMMON_SRCS ./*/*.cpp ./*/*.h)
 
 # for src/*
 include_directories(../)
+#include_directories(../../../cmake)
 
 add_library(network_lib
         ${COMMON_SRCS})

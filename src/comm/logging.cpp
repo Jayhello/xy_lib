@@ -1,6 +1,4 @@
-//
-// Created by root on 20-8-9.
-//
+
 #include "logging.h"
 #include <assert.h>
 #include <errno.h>

@@ -1,6 +1,3 @@
-//
-// Created by Administrator on 2023/9/27.
-//
 
 #include "demo_net.h"
 #include "comm/logging.h"

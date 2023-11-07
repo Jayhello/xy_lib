@@ -1,5 +1,7 @@
 package xy;
 
+// 这里面放一些业务的pb结构体, 例如测试encode, rpc的调用的结构体等
+
 // 简单的验证下 pb 和 buffer的 de/encode
 message SimpleCodec
 {

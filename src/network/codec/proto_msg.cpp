@@ -1,7 +1,13 @@
 #include "proto_msg.h"
 #include "comm/logging.h"
+#include <google/protobuf/descriptor.h>
+#include <string>
+#include "comm/comm.h"
 
 namespace xy{
+
+using ::google::protobuf::DescriptorPool;
+using ::google::protobuf::MessageFactory;
 
 void pbEncode(Message *msg, Buffer &buf){
     size_t offset = buf.size();
@@ -16,15 +22,16 @@ void pbEncode(Message *msg, Buffer &buf){
 // 成功的话返回pb接口体指针, 失败的话返回 nullptr
 Message* decodePb(Buffer &buf){
     if (buf.size() < 8) {
-        error("buffer is too small size: %lu", buf.size());
-        return NULL;
+        string tips = format("buffer is too small size: %lu", buf.size());
+        throw PbCodecException(tips);
+//        return NULL;
     }
     char *p = buf.data();
     uint32_t msglen = *(uint32_t *) p;
     uint32_t namelen = *(uint32_t *) (p + 4);
     if (buf.size() < msglen || buf.size() < 4 + namelen) {
-        error("buf format error size %lu msglen %d namelen %d", buf.size(), msglen, namelen);
-        return NULL;
+        string tips = format("buf format error size %lu msglen %d namelen %d", buf.size(), msglen, namelen);
+        throw PbCodecException(tips);
     }
     string typeName(p + 8, namelen);
     Message *msg = NULL;
@@ -36,14 +43,14 @@ Message* decodePb(Buffer &buf){
         }
     }
     if (msg == NULL) {
-        error("cannot create Message for %buf", typeName.c_str());
-        return NULL;
+        string tips = format("cannot create Message for name %s", typeName.c_str());
+        throw PbCodecException(tips);
     }
     int r = msg->ParseFromArray(p + 8 + namelen, msglen - 8 - namelen);
     if (!r) {
-        error("bad msg for protobuf");
+        string tips = format("protobuf msg parse fail");
         delete msg;
-        return NULL;
+        throw PbCodecException(tips);
     }
     buf.consume(msglen);
     return msg;

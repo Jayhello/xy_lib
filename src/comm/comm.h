@@ -1,6 +1,4 @@
-//
-// Created by wenwen on 2023/3/12.
-//
+
 #pragma once
 #include <stdlib.h>
 #include <string.h>

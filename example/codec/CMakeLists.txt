@@ -5,10 +5,12 @@ project(demo_concurrency)
 set(CMAKE_CXX_STANDARD 11)
 SET(CMAKE_CXX_FLAGS -pthread)
 
+include_directories(../../src)
+
 add_executable(demo_codec demo_codec.cpp)
 target_link_libraries(demo_codec
         comm_lib
         proto_lib
         network_lib
         ${PROTOBUF_LIBRARIES}
-        )
+)

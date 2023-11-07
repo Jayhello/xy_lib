@@ -1,6 +1,3 @@
-//
-// Created by wenwen on 2023/3/12.
-//
 
 #include "comm.h"
 #include <stdarg.h>

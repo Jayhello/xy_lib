@@ -1,7 +1,3 @@
-//
-// Created by wenwen on 2023/3/13.
-//
-
 #pragma once
 
 #include "noncopyable.h"
