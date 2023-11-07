@@ -27,6 +27,7 @@ message("include current bin_dir: ${CMAKE_CURRENT_BINARY_DIR}")
 add_subdirectory(example/util)
 add_subdirectory(example/concurrency)
 add_subdirectory(example/net)
+add_subdirectory(example/codec)
 
 #add_subdirectory(example/demo_http)
 #add_subdirectory(example/demo_raw_network)

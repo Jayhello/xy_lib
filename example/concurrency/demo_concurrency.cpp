@@ -1,7 +1,3 @@
-//
-// Created by wenwen on 2023/3/14.
-//
-
 #include "demo_concurrency.h"
 #include <iostream>
 

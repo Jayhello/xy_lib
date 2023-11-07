@@ -1,0 +1,8 @@
+package xy;
+
+// 简单的验证下 pb 和 buffer的 de/encode
+message SimpleCodec
+{
+  optional uint32 id = 1;
+  optional string name = 2;
+}
